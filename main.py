@@ -38,7 +38,7 @@ def playinggame():
 	while not stone.qt:
 		displaygame(sizex,sizey)
 		stone.movedown()
-		stone.qt = Board.checkgameover(b1)
+		#stone.qt = Board.checkgameover(b1)
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				stone.qt = True
@@ -48,7 +48,8 @@ def playinggame():
 				elif event.key == pygame.K_d:
 					changeright = 1
 				elif event.key == pygame.K_s:
-					pass
+					
+					stone.rotate()
 				elif event.key == pygame.K_SPACE:
 					stone.directbottom()
 			elif event.type == pygame.KEYUP:
@@ -63,8 +64,8 @@ def playinggame():
 
 
 g1 = Gameplay()
-b1 = Board()
-stone = Block()
+stone = Board()
+b1 = Block()
 
 sizex=640
 sizey=600

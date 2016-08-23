@@ -2,71 +2,40 @@ import random
 from gameplay import *
 class Block(Gameplay):
 
-	o=[[0,0],[0,-1],[1,0],[1,-1]]
-	i=[[0,0],[1,0],[2,0],[3,0]]
-	il=[[0,0],[0,-1],[0,-2],[0,-3]]
-	j=[[0,0],[1,0],[2,0],[2,-1]]
-	jr=[[0,0],[0,-1],[0,-2],[1,0]]
-	jl=[[1,0],[1,-1],[1,-2],[0,-2]]
-	jd=[[0,0],[0,-1],[1,-1],[2,-1]]
-	s=[[1,0],[2,0],[0,-1],[1,-1]]
-	sl=[[0,0],[0,-1],[1,-1],[1,-2]]
-	t=[[0,0],[1,0],[2,0],[1,-1]]
-	tl=[[0,-1],[1,-1],[1,0],[1,-2]]
-	tr=[[0,-1],[0,0],[0,-2],[1,-1]]
-	td=[[0,-1],[1,0],[1,-1],[2,-1]]
-	z=[[1,0],[0,0],[1,-1],[2,-1]]
-	zl=[[1,0],[0,-1],[1,-1],[0,-2]]
-	l=[[0,0],[1,0],[2,0],[0,-1]]
-	lr=[[0,0],[0,-1],[0,-2],[1,-2]]
-	ll=[[0,0],[1,0],[1,-1],[1,-2]]
-	ld=[[0,0],[0,-1],[1,-1],[2,-1]]
+	shapes=[[[[0,0],[0,-1],[1,0],[1,-1]],[[0,0],[0,-1],[1,0],[1,-1]],[[0,0],[0,-1],[1,0],[1,-1]],[[0,0],[0,-1],[1,0],[1,-1]]],
+			[[[0,0],[1,0],[2,0],[3,0]],[[0,0],[0,-1],[0,-2],[0,-3]],[[0,0],[1,0],[2,0],[3,0]],[[0,0],[0,-1],[0,-2],[0,-3]]],
+			[[[0,0],[1,0],[2,0],[2,-1]],[[1,0],[1,-1],[1,-2],[0,-2]],[[0,0],[0,-1],[0,-2],[1,0]],[[0,0],[0,-1],[1,-1],[2,-1]]],
+			[[[1,0],[2,0],[0,-1],[1,-1]],[[0,0],[0,-1],[1,-1],[1,-2]],[[1,0],[2,0],[0,-1],[1,-1]],[[0,0],[0,-1],[1,-1],[1,-2]]],
+			[[[0,0],[1,0],[2,0],[1,-1]],[[0,-1],[1,-1],[1,0],[1,-2]],[[0,-1],[1,0],[1,-1],[2,-1]],[[0,-1],[0,0],[0,-2],[1,-1]]],
+			[[[1,0],[0,0],[1,-1],[2,-1]],[[1,0],[0,-1],[1,-1],[0,-2]],[[1,0],[0,0],[1,-1],[2,-1]],[[1,0],[0,-1],[1,-1],[0,-2]]],
+			[[[0,0],[1,0],[2,0],[0,-1]],[[0,0],[1,0],[1,-1],[1,-2]],[[0,0],[0,-1],[1,-1],[2,-1]],[[0,0],[0,-1],[0,-2],[1,-2]]]
+			]
 
-	shape=[]
-
-	shape.append(o)
-	shape.append(o)
-	shape.append(o)
-	shape.append(o)
-
-	shape.append(i)
-	shape.append(il)
-	shape.append(i)
-	shape.append(il)
-
-	shape.append(j)
-	shape.append(jl)
-	shape.append(jd)
-	shape.append(jr)
-
-	shape.append(s)
-	shape.append(sl)
-	shape.append(s)
-	shape.append(sl)
-
-	shape.append(t)
-	shape.append(tl)
-	shape.append(td)
-	shape.append(tr)
-
-	shape.append(z)
-	shape.append(zl)
-	shape.append(z)
-	shape.append(zl)
-
-	shape.append(l)
-	shape.append(ll)
-	shape.append(lr)
-	shape.append(ld)
-
+	offsetx = 15
+	offsety = 0
+	shape = 0
+	shapeid=0
 	codinat = []; oldcodinat = []
 	qt = False
 
 	def __init__(self):
 		pass
 	def newblock(self):
-		x=random.randint(0,5)
+		#print "HaHa New block"
+		self.offsetx = 15
+		self.offsety =0
+		self.shape=random.randint(0,6)
+		self.shapeid=0
 		self.oldcodinat = self.codinat
+		c1 = self.shapes[self.shape][self.shapeid]
+		#print c1
+		self.codinat = []
+		for i in range(len(c1)):
+			self.codinat.append([c1[i][0]+self.offsetx,c1[i][1]+self.offsety])
+		#print self.codinat
+		self.setvalues(1)
+		return
+		'''
 		if x==0:	#like  XXXX
 			self.codinat = [[15,0],[16,0],[17,0],[18,0]]
 		elif x==1:
@@ -76,16 +45,15 @@ class Block(Gameplay):
 		elif x==3:
 			self.codinat = [[15,0],[16,0],[17,0],[16,1]]
 		elif x==4:
-			self.codinat = [[15,0],[16,0],[17,0],[17,1]]
-		self.setvalues(1)
-		return
-		'''print self.codinat
+			self.codinat = [[15,0],[16,0],[17,0],[17,1]]'''
+		'''#print self.codinat
 		for element in self.codinat:
 			if element in self.oldcodinat:
 				self.qt = True
 				self.codinat = self.oldcodinat'''
 
 	def setvalues(self,val):
+		#print "VAL IS +",val 
 		self.gameboard[self.codinat[0][1]][self.codinat[0][0]]=val
 		self.gameboard[self.codinat[1][1]][self.codinat[1][0]]=val
 		self.gameboard[self.codinat[2][1]][self.codinat[2][0]]=val
@@ -129,6 +97,7 @@ class Block(Gameplay):
 			if self.check(-1,0)==1:
 				self.setvalues(0)
 				self.movecodinat(-1,0)
+				self.offsetx-=1
 				self.setvalues(1)
 		return
 	
@@ -137,12 +106,15 @@ class Block(Gameplay):
 			if self.check(1,0)==1:
 				self.setvalues(0)
 				self.movecodinat(1,0)
+				self.offsetx+=1
 				self.setvalues(1)
 		return
 	def movedown(self):
 		if self.check(0,1)==1:
+			#print self.codinat
 			self.setvalues(0)
 			self.movecodinat(0,1)
+			self.offsety+=1
 			self.setvalues(1)
 		else:
 			self.newblock()
@@ -159,7 +131,7 @@ class Block(Gameplay):
 g1 = Gameplay()
 b1 = Block()
 b1.draw()
-b1.printboard()
+b1.#printboard()
 b1.moveleft()
 b1.moveleft()
 b1.moveleft()
@@ -169,4 +141,4 @@ b1.moveleft()
 b1.moveleft()
 b1.moveleft()
 b1.moveleft()
-b1.printboard()'''
+b1.#printboard()'''
