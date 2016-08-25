@@ -1,15 +1,17 @@
 import pygame
 
 class Gameplay:
+	__score = 0
 	gameboard = [[0 for j in range(36)] for i in range(32)]
 	fullrow = [0,0]
-	fullrow.extend( [1] for i in range(32))
+	fullrow.extend( 1 for i in range(32))
 	fullrow.extend([0,0])
 	emptyrow = [0 for i in range(36)]
 	i=0 
 	fulllist = []
 	emptylist = []
-	score = 0
+	LEVEL = 1
+	sc =0 
 
 	def __int__(self):
 		pass
@@ -18,9 +20,10 @@ class Gameplay:
 		i=0
 		for row in self.gameboard[0:30]:
                         if row == self.fullrow:
+				#print "fullrow",row ; print "Fullrow", self.fullrow
 				self.fulllist.append(i)
 			i=i+1
-		return self.fulllist
+		return 
 
 
 
@@ -31,35 +34,32 @@ class Gameplay:
 			if row == self.emptyrow:
 				self.emptylist.append(i)
 			i=i+1
-		return self.emptylist
+		return
 
 	def printboard(self):
 		for row in self.gameboard:
-			#for coloumn in row:
-				#print(coloumn),
 			print row
 
-		#print()
-		#print("        Your Score :",self.score)#,print(self.score)
+	def updatescore(self,t):
+		self.__score = self.__score + t
+		sc = self.__score
+		print "Score Updated", self.__score
+		return 
 
-#g1=Gameplay()
-#g1.printboard()
-'''
-	for i in range(33):
-		gameboard[0][i]="-"
-		gameboard[31][i]="-"
-	for i in range(31):
-		gameboard[i][0]="|"
-		gameboard[i][33]="|"
-	gameboard[0][0]="+"
-	gameboard[0][33]="+"
-	gameboard[31][0]="+"
-	gameboard[31][33]="+"
+	def updatelevel(self):
+		self.LEVEL = int(self.__score/500)+1
+		print "Level Updated"
+		a = self.LEVEL
+		return 
 
-	fullrow = ["X" for i in range(34)]
-	fullrow[0] = "|"
-	fullrow[33] = "|"
-	emptyrow = [" " for i in range(34)]
-	emptyrow[0] = "|"
-	emptyrow[33] = "|"
-	'''
+
+	def givelevel(self):
+		a = self.LEVEL
+		return a
+
+	def givescore(self):
+		a = self.__score
+		print "returnnig=",self.__score
+		return self.__score
+
+

@@ -20,40 +20,22 @@ class Block(Gameplay):
 
 	def __init__(self):
 		pass
+
+
 	def newblock(self):
-		#print "HaHa New block"
 		self.offsetx = 15
 		self.offsety =0
 		self.shape=random.randint(0,6)
 		self.shapeid=0
 		self.oldcodinat = self.codinat
 		c1 = self.shapes[self.shape][self.shapeid]
-		#print c1
 		self.codinat = []
 		for i in range(len(c1)):
 			self.codinat.append([c1[i][0]+self.offsetx,c1[i][1]+self.offsety])
-		#print self.codinat
 		self.setvalues(1)
 		return
-		'''
-		if x==0:	#like  XXXX
-			self.codinat = [[15,0],[16,0],[17,0],[18,0]]
-		elif x==1:
-			self.codinat = [[18,1],[16,0],[17,0],[17,1]]
-		elif x==2:
-			self.codinat = [[16,1],[16,0],[17,0],[17,1]]
-		elif x==3:
-			self.codinat = [[15,0],[16,0],[17,0],[16,1]]
-		elif x==4:
-			self.codinat = [[15,0],[16,0],[17,0],[17,1]]'''
-		'''#print self.codinat
-		for element in self.codinat:
-			if element in self.oldcodinat:
-				self.qt = True
-				self.codinat = self.oldcodinat'''
 
 	def setvalues(self,val):
-		#print "VAL IS +",val 
 		self.gameboard[self.codinat[0][1]][self.codinat[0][0]]=val
 		self.gameboard[self.codinat[1][1]][self.codinat[1][0]]=val
 		self.gameboard[self.codinat[2][1]][self.codinat[2][0]]=val
@@ -111,13 +93,14 @@ class Block(Gameplay):
 		return
 	def movedown(self):
 		if self.check(0,1)==1:
-			#print self.codinat
 			self.setvalues(0)
 			self.movecodinat(0,1)
 			self.offsety+=1
 			self.setvalues(1)
 		else:
 			self.newblock()
+			self.updatescore(10)
+			self.updatelevel()
 		return
 	def directbottom(self):
 		while self.check(0,1)==1:
@@ -125,20 +108,39 @@ class Block(Gameplay):
 			self.movecodinat(0,1)
 			self.setvalues(1)
 		self.newblock()
+		self.updatescore(10)
+		self.updatelevel()
 
 
-'''
-g1 = Gameplay()
-b1 = Block()
-b1.draw()
-b1.#printboard()
-b1.moveleft()
-b1.moveleft()
-b1.moveleft()
-b1.moveleft()
-b1.moveleft()
-b1.moveleft()
-b1.moveleft()
-b1.moveleft()
-b1.moveleft()
-b1.#printboard()'''
+	def rotatecheck(self,identity):
+		co = []
+		c1 = self.shapes[self.shape][identity]
+		for i in range(len(c1)):
+			co.append([c1[i][0]+self.offsetx,c1[i][1]+self.offsety])
+		for row in co:
+			if row[0]<=1 or row[0]>=34 or row[1]>=30:
+				return 0
+		for row in co:
+			if self.gameboard[row[1]][row[0]]==1:
+				if not [row[0],row[1]] in self.codinat:
+					return 0
+		return 1
+
+	def makecodinat(self):
+		self.setvalues(0)
+		self.codinat = []
+		c1 = self.shapes[self.shape][self.shapeid]
+		for i in range(len(c1)):
+			self.codinat.append([c1[i][0]+self.offsetx,c1[i][1]+self.offsety])
+		self.setvalues(1)
+		return 
+
+
+	def rotate(self):
+		
+		if self.rotatecheck((self.shapeid+1)%4):
+			self.shapeid = ((self.shapeid+1)%4)
+			self.makecodinat()
+			#print self.codinat
+
+		return 
